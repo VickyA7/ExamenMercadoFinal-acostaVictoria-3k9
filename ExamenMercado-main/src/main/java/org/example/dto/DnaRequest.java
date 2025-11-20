@@ -1,4 +1,4 @@
-package java.org.example.dto;
+package org.example.dto;
 
 public class DnaRequest {
 }

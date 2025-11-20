@@ -7,8 +7,8 @@ public class MutantDetector {
     private static final int SEQUENCE_LENGTH = 4; //cantidad de letras iguales consecutivas
     private static final int MIN_SEQUENCES_MUTANT = 2; //cantidad minima de secuencias para ser mutante
 
-    public boolean isMutant(String[] dna){
-        if (!isValidDna(dna)){
+    public boolean isMutant(String[] dna) {
+        if (!isValidDna(dna)) {
             throw new IllegalArgumentException("El ADN proporcionado no es válido.");
             //return false;
         }
@@ -24,43 +24,71 @@ public class MutantDetector {
             matrix[i] = dna[i].toCharArray(); // Convertir cada cadena en un array de caracteres
         }
 
+        // Iteración a través de la matriz para buscar secuencias
+
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
-                char currentChar = matrix[row][col];
 
                 // Verificar horizontal
                 if (col <= n - SEQUENCE_LENGTH) {
-                    if (isSequence(matrix, row, col, 0, 1, currentChar)) {
+                    if (checkSequence(matrix, row, col, 0, 1)) {
                         sequencesCount++;
                     }
                 }
 
                 // Verificar vertical
-                if (row <= n - SEQUENCE_LENGTH) {
-                    if (isSequence(matrix, row, col, 1, 0, currentChar)) {
+                if (sequencesCount < MIN_SEQUENCES_MUTANT && row <= n - SEQUENCE_LENGTH) {
+                    if (checkSequence(matrix, row, col, 1, 0)) {
                         sequencesCount++;
                     }
                 }
 
-                // Verificar diagonal derecha
-                if (row <= n - SEQUENCE_LENGTH && col <= n - SEQUENCE_LENGTH) {
-                    if (isSequence(matrix, row, col, 1, 1, currentChar)) {
+                // Verificar diagonal derecha (DESCENDENTE)
+                if (sequencesCount < MIN_SEQUENCES_MUTANT && row <= n - SEQUENCE_LENGTH && col <= n - SEQUENCE_LENGTH) {
+                    if (checkSequence(matrix, row, col, 1, 1)) {
                         sequencesCount++;
                     }
                 }
 
-                // Verificar diagonal izquierda
-                if (row <= n - SEQUENCE_LENGTH && col >= SEQUENCE_LENGTH - 1) {
-                    if (isSequence(matrix, row, col, 1, -1, currentChar)) {
+                // Verificar diagonal izquierda (ASCENDENTE)
+                if (sequencesCount < MIN_SEQUENCES_MUTANT && row <= n - SEQUENCE_LENGTH && col >= SEQUENCE_LENGTH - 1) {
+                    if (checkSequence(matrix, row, col, 1, -1)) {
                         sequencesCount++;
                     }
                 }
 
+                //Utilizamos un early termination
                 if (sequencesCount >= MIN_SEQUENCES_MUTANT) {
                     return true; // Es mutante
                 }
             }
         }
+        return false; // No es mutante
+    }
+        private boolean isValidDna(String[] dna) {
+            if (dna == null || dna.length < SEQUENCE_LENGTH) { // Tamaño mínimo 4x4
+                return false;
+            }
+            final int n = dna.length;
+            for (String row : dna) {
+                if (row == null || row.length() != n) {
+                    return false;
+                }
+                if (!row.matches("[ATCG]+")) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private boolean checkSequence(char[][] matrix, int row, int col, int dRow, int dCol) {
+            char baseChar = matrix[row][col];
+            for (int i = 1; i < SEQUENCE_LENGTH; i++) {
+                if (matrix[row + i * dRow][col + i * dCol] != baseChar) {
+                    return false;
+                }
+            }
+            return true;
 
     }
 }
