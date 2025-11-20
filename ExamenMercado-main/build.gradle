@@ -1,5 +1,8 @@
 plugins {
+    id 'org.springframework.boot' version '3.1.5'
+    id 'io.spring.dependency-management' version '1.1.0'
     id 'java'
+    id 'jacoco'
 }
 
 group = 'org.example'
@@ -43,12 +46,12 @@ jacoco {
     toolVersion = "0.8.11"
 }
 
-//jacocoTestReport {
-  //  dependsOn test
-    //reports {
-      //  xml.required = true
-        //html.required = true
-    //}
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
@@ -58,7 +61,7 @@ jacoco {
             ])
         }))
     }
-//}
+}
 
 jacocoTestCoverageVerification {
     violationRules {
