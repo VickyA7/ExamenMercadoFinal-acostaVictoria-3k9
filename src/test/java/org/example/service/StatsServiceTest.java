@@ -1,4 +1,4 @@
-package java.org.example.service;
+package org.example.service;
 
 public class StatsServiceTest {
 }
