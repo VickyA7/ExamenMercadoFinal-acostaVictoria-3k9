@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository // Le indica a Spring que esta es una interfaz de acceso a datos
-public interface DnaRecordRepository extends JpaRepository<DnaRecord, Long> {
+@Repository // Interfaz de acceso a datos
+public interface DnaRecordRepository extends JpaRepository<DnaRecord, Long>  {
+                                                //Extend JpaRepository para operaciones CRUD
 
     // Spring Data JPA creará automáticamente la consulta SQL para este metodo:
     // SELECT * FROM dna_records WHERE dna_hash = ?

@@ -13,8 +13,8 @@ import java.util.HexFormat;
 import java.util.Optional;
 
 @Service // Le dice a Spring que esta clase contiene lógica de negocio
-@RequiredArgsConstructor // Lombok genera un constructor con todos los campos 'final'
-@Slf4j // Lombok genera un logger automáticamente
+@RequiredArgsConstructor
+@Slf4j // Lombok genera un logger automáticamente (buena practica)
 public class MutantService {
 
     // Spring inyectará estas dependencias automáticamente
@@ -26,7 +26,8 @@ public class MutantService {
      * Si el ADN ya fue analizado, retorna el resultado cacheado.
      * Si no, lo analiza, guarda el resultado y lo retorna.
      */
-    @Transactional // Asegura que todas las operaciones de BD se hagan en una sola transacción
+
+    @Transactional
     public boolean analyzeDna(String[] dna) {
         // 1. Calcular hash del ADN para identificarlo únicamente
         String dnaHash = calculateDnaHash(dna);

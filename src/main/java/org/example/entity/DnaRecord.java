@@ -20,8 +20,9 @@ public class DnaRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //Para buscar ADN mas rapido:
     @Column(nullable = false, unique = true, length = 64)
-    private String dnaHash; // El hash SHA-256 del ADN
+    private String dnaHash; // El hash SHA-256 del ADN, algoritmo convierte texto en codigo de 64 caracteres
 
     @Column(nullable = false)
     private boolean isMutant;
