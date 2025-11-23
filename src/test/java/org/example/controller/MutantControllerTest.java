@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.repository.DnaRecordRepository;
+import org.example.service.MutantService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest // Anotación clave: Levanta TODA tu aplicación de Spring para el test.
-@AutoConfigureMockMvc // Nos da una herramienta mágica llamada MockMvc para simular peticiones HTTP.
+@AutoConfigureMockMvc // Simula peticiones HTTP.
 @Transactional // Cada test se ejecuta en su propia transacción y al final se deshace (rollback).
         // Esto asegura que la base de datos esté limpia antes de cada test.
 class MutantControllerTest {
@@ -27,6 +28,9 @@ class MutantControllerTest {
 
     @Autowired
     private DnaRecordRepository dnaRecordRepository; // Acceso directo a la BD para preparar y limpiar datos.
+
+    @Autowired
+    private MutantService mutantService; // Servicio para preparar datos de prueba.
 
     @BeforeEach
     void setUp() {
