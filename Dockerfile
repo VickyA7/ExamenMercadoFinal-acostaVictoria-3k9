@@ -3,14 +3,14 @@
 # ========================================
 # Imagen base ligera de Alpine Linux (~5MB) para compilar el código
 # Se usa "as build" para nombrar esta etapa y referenciarla después
-FROM alpine:latest as build
+FROM alpine:latest AS build
 
 # Actualizar el índice de paquetes de Alpine
 RUN apk update
 
 # Instalar OpenJDK 17 necesario para compilar código Java/Spring Boot
 # Alpine usa 'apk' como gestor de paquetes (equivalente a apt/yum)
-RUN apk add openjdk21-jdk
+RUN apk add openjdk21
 
 # Copiar TODO el código fuente del proyecto al contenedor
 # Primer '.' = origen (directorio actual del host)
@@ -32,7 +32,7 @@ RUN ./gradlew bootJar --no-daemon
 # ========================================
 # Imagen base con SOLO el runtime de Java (sin herramientas de compilación)
 # Esto reduce el tamaño de la imagen final de ~500MB a ~200MB
-FROM openjdk:21-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 # Documentar que la aplicación escucha en el puerto 8080
 # IMPORTANTE: esto NOY abre el puerto, solo es documentación
