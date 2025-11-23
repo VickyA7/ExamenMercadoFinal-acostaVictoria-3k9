@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.entity.DnaRecord;
+import org.example.exception.DnaHashCalculationException;
 import org.example.repository.DnaRecordRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +72,7 @@ public class MutantService {
 
         } catch (NoSuchAlgorithmException e) {
             // Esto nunca debería pasar porque SHA-256 es estándar
-            throw new RuntimeException("Error calculando hash SHA-256", e);
+            throw new DnaHashCalculationException("Error calculando hash SHA-256", e);
         }
     }
 }
