@@ -25,12 +25,13 @@ API REST para detectar si un humano es mutante basándose en su secuencia de ADN
 
 1. [URL de la API Desplegada](#-url-de-la-api-desplegada)
 2. [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-3. [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
-4. [Prerequisitos](#-prerequisitos)
-5. [Instrucciones de Ejecución Local](#-instrucciones-de-ejecución-local)
-6. [Instrucciones de Ejecución con Docker](#-instrucciones-de-ejecución-con-docker)
-7. [Uso de la API](#-uso-de-la-api)
-8. [Testing](#-testing)
+3. [Lógica y Rendimiento](#-lógica-y-rendimiento)
+4. [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
+5. [Prerequisitos](#-prerequisitos)
+6. [Instrucciones de Ejecución Local](#-instrucciones-de-ejecución-local)
+7. [Instrucciones de Ejecución con Docker](#-instrucciones-de-ejecución-con-docker)
+8. [Uso de la API](#-uso-de-la-api)
+9. [Testing](#-testing)
 
 ---
 
@@ -56,6 +57,17 @@ La API está desplegada en Render y es accesible públicamente. La mejor forma d
 
 ---
 
+## ⚡ Lógica y Rendimiento
+
+El núcleo del proyecto es un algoritmo eficiente para la detección de mutantes:
+
+- **Regla de Negocio:** Se busca más de una secuencia de 4 letras iguales en dirección horizontal, vertical o diagonal.
+- **Validación:** Se asegura que la matriz sea NxN y contenga solo caracteres válidos (A, T, C, G).
+- **Optimización:** Implementa **Early Termination**. El algoritmo se detiene inmediatamente al encontrar la segunda secuencia, evitando recorrer toda la matriz innecesariamente.
+- **Complejidad:** $O(N^2)$ en el peor caso, pero tiende a $O(1)$ en casos positivos.
+
+---
+
 ## 🏗️ Arquitectura del Proyecto
 
 El proyecto sigue una arquitectura en capas limpia y desacoplada para promover la mantenibilidad y escalabilidad:
@@ -68,6 +80,19 @@ El proyecto sigue una arquitectura en capas limpia y desacoplada para promover l
 - **Validation:** Contiene la lógica para validaciones de entrada personalizadas.
 - **Exception Handling:** Centraliza el manejo de errores para respuestas consistentes.
 - **Config:** Gestiona la configuración de beans, como Swagger.
+
+### Estructura de Directorios
+```
+src/main/java/org/example/
+├── controller/ # MutantController
+├── dto/ # DnaRequest, StatsResponse
+├── service/ # MutantDetector (Algoritmo), Services
+├── repository/ # DnaRecordRepository
+├── entity/ # DnaRecord
+├── validation/ # Validadores custom
+├── exception/ # GlobalExceptionHandler
+└── config/ # SwaggerConfig
+```
 
 ---
 
@@ -83,8 +108,8 @@ El proyecto sigue una arquitectura en capas limpia y desacoplada para promover l
 
 ### Paso 1: Clonar el Repositorio
 ```bash
-git clone https://github.com/tu-usuario/tu-repositorio.git
-cd tu-repositorio
+git clone https://github.com/acostaVictoria/ExamenMercado-acostaVictoria-3k9.git
+cd ExamenMercado-acostaVictoria-3k9
 ```
 
 ### Paso 2: Ejecutar la Aplicación con Gradle
@@ -126,7 +151,7 @@ La aplicación estará disponible en las mismas URLs locales que en el paso ante
 
 ## 📡 Uso de la API
 
-La forma más sencilla de probar los endpoints es a través de la **interfaz de Swagger UI**. A continuación, se muestran ejemplos con cURL.
+La forma más sencilla de probar los endpoints es a través de la **interfaz de Swagger UI**. 
 
 ### POST /mutant
 Verifica si una secuencia de ADN es mutante.
@@ -175,15 +200,23 @@ curl -X GET "http://localhost:8080/stats"
 **Respuesta:** `HTTP 200 OK`
 ```json
 {
-  "count_mutant_dna": 1,
-  "count_human_dna": 1,
-  "ratio": 1.0
+  "count_mutant_dna": 40,
+  "count_human_dna": 100,
+  "ratio": 0.4
 }
 ```
 
 ---
 
 ## 🧪 Testing
+El proyecto cuenta con una suite de 36 tests automatizados que garantizan la calidad y correctitud del código.
+
+###Resumen de Tests
+- MutantDetectorTest (17 tests): Valida el algoritmo core (casos mutantes, humanos, bordes y excepciones).
+- MutantServiceTest (5 tests): Valida la lógica de negocio usando Mocks.
+- StatsServiceTest (6 tests): Valida el cálculo de estadísticas.
+- MutantControllerTest (8 tests): Tests de integración para los endpoints REST.
+
 
 ### Ejecutar todos los Tests
 ```bash
