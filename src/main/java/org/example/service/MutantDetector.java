@@ -9,8 +9,7 @@ public class MutantDetector {
 
     public boolean isMutant(String[] dna) {
         if (!isValidDna(dna)) {
-            throw new IllegalArgumentException("El ADN proporcionado no es válido.");
-            //return false;
+            return false;
         }
 
         final int n = dna.length;

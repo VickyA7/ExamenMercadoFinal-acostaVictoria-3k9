@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest // Anotación clave: Levanta TODA tu aplicación de Spring para el test.
+@SpringBootTest // Levanta aplicación de Spring para el test.
 @AutoConfigureMockMvc // Simula peticiones HTTP.
 @Transactional // Cada test se ejecuta en su propia transacción y al final se deshace (rollback).
         // Esto asegura que la base de datos esté limpia antes de cada test.
@@ -100,6 +100,30 @@ class MutantControllerTest {
         mockMvc.perform(post("/mutant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidDnaJson))
+                .andExpect(status().isBadRequest()); // Verificamos que la respuesta sea un HTTP 400
+    }
+
+    @Test
+    @DisplayName("POST /mutant debe retornar 400 Bad Request cuando ADN es nulo")
+    void checkMutant_ShouldReturnBadRequest_WhenDnaIsNull() throws Exception {
+        String nullDnaJson = """
+                {
+                  "dna": null
+                }
+                """;
+
+        mockMvc.perform(post("/mutant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(nullDnaJson))
+                .andExpect(status().isBadRequest()); // Verificamos que la respuesta sea un HTTP 400
+    }
+
+    @Test
+    @DisplayName("POST /mutant debe retornar 400 Bad Request cuando ADN está vacío")
+    void checkMutant_ShouldReturnBadRequest_WhenDnaIsEmpty() throws Exception {
+        mockMvc.perform(post("/mutant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        )
                 .andExpect(status().isBadRequest()); // Verificamos que la respuesta sea un HTTP 400
     }
 
