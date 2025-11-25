@@ -211,7 +211,7 @@ curl -X GET "http://localhost:8080/stats"
 ## 🧪 Testing
 El proyecto cuenta con una suite de 36 tests automatizados que garantizan la calidad y correctitud del código.
 
-###Resumen de Tests
+### Resumen de Tests
 - MutantDetectorTest (17 tests): Valida el algoritmo core (casos mutantes, humanos, bordes y excepciones).
 - MutantServiceTest (5 tests): Valida la lógica de negocio usando Mocks.
 - StatsServiceTest (6 tests): Valida el cálculo de estadísticas.

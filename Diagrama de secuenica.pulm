@@ -1,0 +1,40 @@
+@startuml
+title Consultas a los endpoints Mutant API
+
+actor Cliente
+participant "MutantController" as Controller
+participant "MutantService" as MutantService
+participant "MutantDetector" as MutantDetector
+participant "DnaRecordRepository" as Repo
+participant "StatsService" as StatsService
+
+== POST /mutant ==
+Cliente -> Controller: POST /mutant\nJSON { dna[] }
+Controller -> MutantService: analyzeDna(dna)
+MutantService -> Repo: findByDnaHash(hash)
+alt ADN previamente analizado
+    Repo --> MutantService: Optional<DnaRecord>\n(isMutant cacheado)
+else ADN nuevo
+    MutantService -> MutantDetector: isMutant(dna)
+    MutantDetector --> MutantService: boolean
+    MutantService -> Repo: save(new DnaRecord)
+end
+MutantService --> Controller: boolean isMutant
+alt isMutant
+    Controller --> Cliente: 200 OK (sin cuerpo)
+else
+    Controller --> Cliente: 403 Forbidden
+end
+
+== GET /stats ==
+Cliente -> Controller: GET /stats
+Controller -> StatsService: getStats()
+StatsService -> Repo: countByIsMutant(true)
+Repo --> StatsService: countMutant
+StatsService -> Repo: countByIsMutant(false)
+Repo --> StatsService: countHuman
+StatsService -> StatsService: calculateRatio()
+StatsService --> Controller: StatsResponse
+Controller --> Cliente: 200 OK + JSON\n{count_mutant_dna,\n count_human_dna,\n ratio}
+
+@enduml
