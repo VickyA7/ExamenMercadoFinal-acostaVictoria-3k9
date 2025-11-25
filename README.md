@@ -19,6 +19,9 @@ API REST para detectar si un humano es mutante basándose en su secuencia de ADN
 - **Año:** 2025
 - **Universidad:** Universidad Tecnológica Nacional - Regional Mendoza
 
+- **Link a repositorio:** [https://github.com/VickyA7/ExamenMercadoFinal-acostaVictoria-3k9.git](https://github.com/VickyA7/ExamenMercadoFinal-acostaVictoria-3k9.git)
+
+
 ---
 
 ## 📋 Tabla de Contenidos
