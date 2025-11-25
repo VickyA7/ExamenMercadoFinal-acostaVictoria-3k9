@@ -121,9 +121,15 @@ class MutantControllerTest {
     @Test
     @DisplayName("POST /mutant debe retornar 400 Bad Request cuando ADN está vacío")
     void checkMutant_ShouldReturnBadRequest_WhenDnaIsEmpty() throws Exception {
+        String emptyDnaJson = """
+                {
+                  "dna": []
+                }
+                """;
+
         mockMvc.perform(post("/mutant")
                         .contentType(MediaType.APPLICATION_JSON)
-                        )
+                        .content(emptyDnaJson))
                 .andExpect(status().isBadRequest()); // Verificamos que la respuesta sea un HTTP 400
     }
 
